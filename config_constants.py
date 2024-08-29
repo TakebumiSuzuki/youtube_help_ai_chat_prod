@@ -4,7 +4,7 @@ GC_PROJECT_NAME = 'arvado-project'
 LOCATION = 'us-central1'
 
 GEMINI_HYDE_MODEL = 'gemini-1.5-pro'
-GEMINI_EMBEDDING_EN = 'models/text-embedding-004' # 英語のみの対応
+GEMINI_EMBEDDING_EN = 'text-embedding-004' # 英語のみの対応
 GEMINI_EMBEDDING_MULTI = 'text-multilingual-embedding-002'
 GEMINI_QA_MODEL = 'gemini-1.5-pro'
 # GEMINI_RERANK_MODEL = 'gemini-1.5-pro-exp-0801'

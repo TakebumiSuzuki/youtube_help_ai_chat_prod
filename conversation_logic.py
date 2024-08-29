@@ -20,7 +20,7 @@ handler.setLevel(logging.DEBUG)
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-
+# Vertexaiの初期設定
 vertexai.init(project=CC.GC_PROJECT_NAME, location=CC.LOCATION)
 
 # FAISSインデックスの読み込み
@@ -57,12 +57,13 @@ for lang, file_path in CC.JSON_FILES.items():
 logger.info("すべてのJSONデータの読み込みが正常に終了しました。")
 
 
+
 def get_hyde_query(orig_input: str) -> str:
     try:
-        system_query = PC.HYDE_PROMPT
-
+        logger.info("オリジナルの解答からLLMを使ってHYDEクエリの作成を開始します")
         start_time = time.time()
 
+        system_query = PC.HYDE_PROMPT
         model = GenerativeModel(CC.GEMINI_HYDE_MODEL)
         result = model.generate_content(
             contents=system_query + orig_input,
@@ -72,8 +73,8 @@ def get_hyde_query(orig_input: str) -> str:
         )
         hyde_query = result.text
 
-        logger.info(f"HYDEクエリの作成が終了しました:")
         logger.info(f"{hyde_query}")
+        logger.info(f"以上のように、HYDEクエリの作成が終了しました:")
         end_time = time.time()  # 処理終了時刻を取得
         elapsed_time = end_time - start_time  # 経過時間を計算
         print(f"GET_HYDE_QUERY_処理時間: {elapsed_time:.3f}秒")  # 経過時間を表示
@@ -86,6 +87,7 @@ def get_hyde_query(orig_input: str) -> str:
 
 
 def split_last_brackets(input_string):
+    logger.info("LLMからの回答から最後の言語部分の抽出を始めます")
     # 文字列を逆順に並べ替える
     reversed_string = input_string[::-1]
     # 最初の開き中括弧を見つける
@@ -95,11 +97,12 @@ def split_last_brackets(input_string):
     # 最後の中括弧の部分を抽出
     prompt_part = input_string[:end_index]
     bracket_part = input_string[end_index:]
-
+    logger.info(f"言語部分の抽出が終わりました: {bracket_part}")
     return prompt_part, bracket_part
 
 
 def extract_language(text: str) -> str:
+    logger.info(f"{text} という文字列から言語を特定/抽出します")
     if 'japanese' in text.lower():
         return UC.JAPANESE
     elif 'spanish' in text.lower():
@@ -119,6 +122,8 @@ def extract_language(text: str) -> str:
 
 def get_query_vector(hyde_query: str, language: str) -> np.ndarray:
     try:
+        logger.info("クエリのベクトル化を始めます")
+
         model_name = UC.ENGLISH if language == UC.ENGLISH else CC.GEMINI_EMBEDDING_MULTI
         model = TextEmbeddingModel.from_pretrained(model_name)
         embeddings = model.get_embeddings(
@@ -139,8 +144,12 @@ def get_query_vector(hyde_query: str, language: str) -> np.ndarray:
 
 def retrieve_docs(query_vector: np.ndarray, language: str) -> List[str]:
     try:
-        faiss = loaded_faiss[language]
-        json = loaded_json[language]
+        logger.info("言語にあったデータベースを取得します")
+        faiss = loaded_faiss[language] if language in loaded_faiss else loaded_faiss[UC.ENGLISH]
+        json = loaded_json[language] if language in loaded_faiss else loaded_json[UC.ENGLISH]
+        logger.info("言語にあったデータベースの取得が終わりました")
+
+        logger.info("faissによる近傍探索を開始します")
         distances, indices = faiss.search(query_vector, CC.K)
         documents = []
         logger.info("ドキュメント(上位複数)の取得が完了しました。")
@@ -176,6 +185,7 @@ def handle_retrieval(orig_input: str) -> str:
 
 def get_stream(inputText: str, docs: str, language: str):
     try:
+        logger.info("LLMによる最終的な回答の問い合わせを始めます")
         qa_template = PC.QA_PROMPT
         qa_base_prompt = qa_template.format(language=language, context=docs)
         system_prompt = f"{qa_base_prompt} + 'Here's the question: '"
@@ -193,6 +203,8 @@ def get_stream(inputText: str, docs: str, language: str):
             generation_config=CC.GENERATION_CONFIG,
             stream=True
         )
+
+        logger.info("LLMによる最終的な回答生成が終了しました")
         end_time = time.time()  # 処理終了時刻を取得
         elapsed_time = end_time - start_time  # 経過時間を計算
         print(f"FINAL_QA_処理時間: {elapsed_time:.3f}秒")  # 経過時間を表示
@@ -202,8 +214,6 @@ def get_stream(inputText: str, docs: str, language: str):
     except Exception as e:
         logger.error(f"ストリーム生成中にエラーが発生しました: {e}")
         raise
-
-
 
 
 

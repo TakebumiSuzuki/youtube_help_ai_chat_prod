@@ -63,13 +63,15 @@ def get_hyde_query(orig_input: str) -> str:
         logger.info("オリジナルの解答からLLMを使ってHYDEクエリの作成を開始します")
         start_time = time.time()
 
-        system_query = PC.HYDE_PROMPT
-        model = GenerativeModel(CC.GEMINI_HYDE_MODEL)
+        model = GenerativeModel(
+            model_name=CC.GEMINI_HYDE_MODEL,
+            system_instruction=[PC.HYDE_PROMPT],
+        )
         result = model.generate_content(
-            contents=system_query + orig_input,
-            safety_settings=CC.SAFETYSETTINGS,
+            contents=orig_input,
+            safety_settings=CC.SAFTY_SETTINGS,
             generation_config=CC.GENERATION_CONFIG,
-            stream=False
+            stream=False,
         )
         hyde_query = result.text
 
@@ -124,13 +126,13 @@ def get_query_vector(hyde_query: str, language: str) -> np.ndarray:
     try:
         logger.info("クエリのベクトル化を始めます")
 
-        model_name = UC.ENGLISH if language == UC.ENGLISH else CC.GEMINI_EMBEDDING_MULTI
+        model_name = CC.GEMINI_EMBEDDING_EN if language == UC.ENGLISH else CC.GEMINI_EMBEDDING_MULTI
         model = TextEmbeddingModel.from_pretrained(model_name)
         embeddings = model.get_embeddings(
             texts=[TextEmbeddingInput(text=hyde_query, task_type='RETRIEVAL_QUERY')],
             output_dimensionality=768
         )
-        result = [embedding.value for embedding in embeddings] #embeddingsには要素が一つしかないが一応内包表記で。
+        result = [embedding.values for embedding in embeddings] #embeddingsには要素が一つしかないが一応内包表記で。
         query_vector = np.array(result, dtype=np.float32)
 
         logger.info("クエリのembeddingベクトル生成が完了しました。")
@@ -189,17 +191,18 @@ def get_stream(inputText: str, docs: str, language: str):
         qa_template = PC.QA_PROMPT
         qa_base_prompt = qa_template.format(language=language, context=docs)
         system_prompt = f"{qa_base_prompt} + 'Here's the question: '"
-        print(qa_base_prompt)
+
+        logger.info(system_prompt)
         start_time = time.time()
 
-        model = GenerativeModel(CC.GEMINI_QA_MODEL)
-        message = [{
-            'role':'user',
-            'parts': [system_prompt + inputText]
-        }]
+        model = GenerativeModel(
+            model_name=CC.GEMINI_QA_MODEL,
+            system_instruction=[system_prompt]
+        )
+
         stream = model.generate_content(
-            contents=message,
-            safety_settings=CC.SAFETYSETTINGS,
+            contents=inputText,
+            safety_settings=CC.SAFTY_SETTINGS,
             generation_config=CC.GENERATION_CONFIG,
             stream=True
         )

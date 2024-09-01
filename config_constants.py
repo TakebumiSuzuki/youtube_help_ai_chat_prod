@@ -1,7 +1,9 @@
 import ui_constants as UC
+from vertexai.generative_models import HarmCategory, HarmBlockThreshold, SafetySetting
 
-GC_PROJECT_NAME = 'arvado-project'
-LOCATION = 'us-central1'
+
+GC_PROJECT_NAME = 'arvato-developments'
+LOCATION = 'asia-southeast1'
 
 GEMINI_HYDE_MODEL = 'gemini-1.5-pro'
 GEMINI_EMBEDDING_EN = 'text-embedding-004' # 英語のみの対応
@@ -35,24 +37,26 @@ JSON_FILES = {
 
 GENERATION_CONFIG = {"temperature": 0.8}
 
-
-# GEMINIのセーフティセッティングで使う
-SAFETYSETTINGS = [
-    {
-        "category": "HARM_CATEGORY_HARASSMENT",
-        "threshold": "BLOCK_NONE",
-    },
-    {
-        "category": "HARM_CATEGORY_HATE_SPEECH",
-        "threshold": "BLOCK_NONE",
-    },
-    {
-        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-        "threshold": "BLOCK_NONE",
-    },
-    {
-        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-        "threshold": "BLOCK_NONE",
-    },
+SAFTY_SETTINGS = [
+    SafetySetting(
+        category=HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+        method=SafetySetting.HarmBlockMethod.SEVERITY,
+        threshold=HarmBlockThreshold.BLOCK_ONLY_HIGH,
+    ),
+    SafetySetting(
+        category=HarmCategory.HARM_CATEGORY_HARASSMENT,
+        method=SafetySetting.HarmBlockMethod.SEVERITY,
+        threshold=HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+    ),
+    SafetySetting(
+        category=HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+        method=SafetySetting.HarmBlockMethod.SEVERITY,
+        threshold=HarmBlockThreshold.BLOCK_ONLY_HIGH,
+    ),
+    SafetySetting(
+        category=HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+        method=SafetySetting.HarmBlockMethod.SEVERITY,
+        threshold=HarmBlockThreshold.BLOCK_ONLY_HIGH,
+    ),
 ]
 

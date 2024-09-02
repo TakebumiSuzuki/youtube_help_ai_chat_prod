@@ -32,36 +32,36 @@ def TITLE(l):
 
 def SUBTITLE(l):
     if l == JAPANESE:
-        return '⚠️ YouTubeクリエーターサポートに書いている情報のみ答えられます。AIの情報を鵜呑みにせずに、左カラムの情報ソースのリンクを必ず確認して下さい。'
+        return '⚠️ YouTubeヘルプに書いている情報のみ答えられます。AIの情報を鵜呑みにせずに、左カラムの情報ソースのリンクを必ず確認して下さい。'
     elif l == SPANISH:
-        return '⚠️ Solo puedo responder con información escrita en el Soporte para Creadores de YouTube. No tome la información de IA al pie de la letra y siempre verifique los enlaces de las fuentes de información en la columna izquierda.'
+        return '⚠️ Solo puedo responder la información escrita en la Ayuda de YouTube. No se limite a tomar la información de la IA al pie de la letra; asegúrese de consultar los enlaces de fuentes de información en la columna de la izquierda.'
     elif l == INDONESIAN:
-        return '⚠️ Saya hanya dapat menjawab berdasarkan informasi yang tertulis di Dukungan Kreator YouTube. Jangan langsung mempercayai informasi AI dan selalu periksa tautan sumber informasi di kolom sebelah kiri.'
+        return '⚠️ Saya hanya bisa menjawab informasi yang tertulis di Bantuan YouTube. Jangan hanya menerima informasi AI begitu saja; pastikan untuk memeriksa tautan sumber informasi di kolom kiri.'
     elif l == KOREAN:
-        return '⚠️ YouTube 크리에이터 지원에 작성된 정보만 답변할 수 있습니다. AI 정보를 그대로 받아들이지 마시고 왼쪽 열의 정보 출처 링크를 반드시 확인해 주세요.'
+        return '⚠️ YouTube 도움말에 기재된 정보에만 답변해드릴 수 있습니다. AI 정보를 액면 그대로 받아들이지 마십시오. 왼쪽 열의 정보 소스 링크를 확인하세요.'
     elif l == VIETNAMESE:
-        return '⚠️ Chỉ có thể trả lời thông tin được viết trên Hỗ trợ người sáng tạo của YouTube. Đừng tin hoàn toàn vào thông tin từ AI, hãy luôn kiểm tra các liên kết nguồn thông tin trong cột bên trái.'
+        return '⚠️ Tôi chỉ có thể trả lời những thông tin được ghi trong Trợ giúp YouTube. Đừng chỉ lấy thông tin AI theo mệnh giá; hãy chắc chắn kiểm tra các liên kết nguồn thông tin ở cột bên trái.'
     elif l == THAI:
-        return 'ฉันสามารถตอบได้ตามข้อมูลที่เขียนไว้ใน YouTube Creator Support เท่านั้น กรุณาอย่ารับข้อมูลจาก AI อย่างผิวเผิน และโปรดตรวจสอบลิงก์แหล่งข้อมูลที่อยู่ในคอลัมน์ด้านซ้ายเสมอ'
+        return 'ฉันสามารถตอบได้เฉพาะข้อมูลที่เขียนไว้ในวิธีใช้ของ YouTube เท่านั้น อย่าเพิ่งใช้ข้อมูล AI ตามมูลค่าที่กำหนด อย่าลืมตรวจสอบลิงก์แหล่งข้อมูลในคอลัมน์ด้านซ้าย'
     else:
-        return '⚠️ I can only answer based on information written in YouTube Creator Support. Please do not take AI information at face value and always check the information source links in the left column.'
+        return '⚠️ I can only answer based on information written in YouTube Help. Please do not take AI information at face value and always check the information source links in the left column.'
 
 
 def INPUT_HOLDER(l):
     if l == JAPANESE:
-        return 'YouTubeに関する質問をして下さい。過去の会話は記憶しないことにご留意ください。'
+        return 'YouTubeに関する質問をして下さい。また、過去の会話は記憶しないことにご留意ください。'
     elif l == SPANISH:
-        return 'Por favor, haga una pregunta sobre YouTube. Tenga en cuenta que las conversaciones anteriores no se recuerdan.'
+        return 'Por favor haga preguntas sobre YouTube. Además, tenga en cuenta que las conversaciones pasadas no se recuerdan.'
     elif l == INDONESIAN:
-        return 'Silakan ajukan pertanyaan tentang YouTube. Harap diingat bahwa percakapan sebelumnya tidak diingat.'
+        return 'Silakan ajukan pertanyaan tentang YouTube. Harap dicatat juga bahwa percakapan masa lalu tidak diingat.'
     elif l == KOREAN:
-        return 'YouTube에 대한 질문을 해 주세요. 이전 대화는 기억하지 않는다는 점을 유의해 주세요.'
+        return '유튜브에 대해 질문해주세요. 또한, 과거 대화 내용은 기억되지 않으니 주의하시기 바랍니다.'
     elif l == VIETNAMESE:
-        return 'YouTube liên quan đến câu hỏi. Xin lưu ý rằng cuộc trò chuyện trước đó sẽ không được ghi nhớ.'
+        return 'Vui lòng đặt câu hỏi về YouTube. Ngoài ra, xin lưu ý rằng các cuộc trò chuyện trong quá khứ không được ghi nhớ.'
     elif l == THAI:
-        return 'กรุณาถามคำถามเกี่ยวกับ YouTube และโปรดทราบว่าฉันจะไม่จดจำการสนทนาในอดีต'
+        return 'กรุณาถามคำถามเกี่ยวกับ YouTube นอกจากนี้ โปรดทราบว่าการสนทนาที่ผ่านมาจะไม่ถูกจดจำ'
     else:
-        return 'Please ask a question about YouTube. Please note that previous conversations are not remembered.'
+        return 'Please ask questions about YouTube. Also, please note that past conversations are not remembered.'
 
 
 def CLEAR_BUTTON(l):
